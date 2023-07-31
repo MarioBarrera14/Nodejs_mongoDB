@@ -1,5 +1,6 @@
 const express=require('express')
 const router=express.Router() //requiero express para crear rutas
+const User=require('../models/User')
 
 router.get('/users/signin', (req, res) => {
     res.render('users/signin');
@@ -25,7 +26,16 @@ router.get('/users/signin', (req, res) => {
     if(errors.lenth>0){
       res.render('users/signup',{errors,name,email,password,confirm_password})
     }else{
-    res.send('ok');
+    const emailUser = await User.findOne({email:email})
+    if(emailUser){
+      req.flash('error_msg','El email ya esta en uso')
+      res.redirect('/users/signup')
+    }
+    const newUser= new User({name,email,password})
+    newUser.password=await newUser.encryptPassword(password)
+    await newUser.save()
+    req.flash('sucess_msg','Estas registrado')
+    res.redirect('/users/signin')
     }
   });
 
