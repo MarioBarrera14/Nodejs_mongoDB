@@ -4,9 +4,11 @@ const session=require('express-session')
 const path = require ('path')
 const connectToDB = require('./database'); 
 const flash = require('connect-flash'); 
+const passport=require('passport')
 //inicializaciones
 const app= express();
-
+require('./database')
+require('./config/passport')
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', '.ejs');
 
@@ -19,11 +21,15 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(flash())
 //Variables globales seccion para que todos los datos de nuestra aplicacion sea accesible
 app.use((req,res,next)=>{
   res.locals.succes_msg=req.flash('succes_msg')
   res.locals.error_msg=req.flash('error_msg')
+  res.locals.error_msg=req.flash('error')
+  res.locals.user=req.user || null;
   next() 
 })
 
