@@ -1,4 +1,4 @@
-##Carpetas creadas en src
+## Carpetas creadas en src ##
 
 config: en esta carpeta podemos almacenar diferentes archivos,Por ejemplo aca puedo almacenar mi configuracion o
 conexion de mi base de datos, tambien podemos guardar variables de autenticacion.
